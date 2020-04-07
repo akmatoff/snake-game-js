@@ -1,8 +1,6 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const backgroundColor = '#ffeecc';
-
 const scoreInfo = document.querySelector('#score-info');
 
 // get DPI
@@ -22,20 +20,25 @@ fixDpi();
 const centerY = canvas.height / 2;
 const centerX = canvas.width / 2;
 
-// Draw the background
-ctx.fillStyle = backgroundColor;
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-let dx, dy, speed, foodX, foodY, gs, score;
+let dx, dy, speed, foodX, foodY, gs, score, backgroundColor;
 
 dx = 0; // Number to add to player X
 dy = 0; // Number to add to player Y
 
-snakeColor = '#3efc44'
+backgroundColor = '#ffeecc'; // Background color
+snakeColor = '#3efc44'; // Snake color
 size = 30; // Player size and food size
 speed = 5; // Player speed
 gs = false; // Game started
 score = 0; // Player's score
+startTime = 400;
+
+setInterval(() => {backgroundColor = '#cc3360';}, startTime);
+setInterval(() => {backgroundColor = '#334cce'}, startTime * 2);
+setInterval(() => {backgroundColor = '#9efeee'}, startTime * 3);
+setInterval(() => {backgroundColor = '#9ecbee'}, startTime * 4);
+setInterval(() => {backgroundColor = '#3ccfef'}, startTime * 5);
+setInterval(() => {backgroundColor = '#8ffeff'}, startTime * 6);
 
 // The coordinates of the snake
 let snake = [
@@ -43,6 +46,7 @@ let snake = [
     {x: centerX - size, y: centerY},
     {x: centerX - size * 2, y: centerY},
     {x: centerX - size * 3, y: centerY},
+    {x: centerX - size * 4, y: centerY},
 ]
 
 // Draw parts of the snake
@@ -72,7 +76,14 @@ function moveSnake() {
         createFood();
         scoreInfo.innerHTML = "<b>SCORE:</b> " + score;
     } else {
-        snake.pop();
+        setTimeout(() => {snake.pop();}, 500)
+    }
+
+    for (let i = 0; i < snake.length; i++) {
+        if (snake[0].x < (snake[i] + size) ||
+            snake[0].y === snake[i]) {
+                snake.splice(i);
+            }
     }
 }
 

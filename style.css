@@ -1,0 +1,36 @@
+* {
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: "San Francisco";
+    src: url("SFNSText-Medium.ttf"); 
+}
+
+
+/** Medium */
+/* @font-face {
+    font-family: "San Francisco";
+    font-weight: 500;
+    src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-medium-webfont.woff");
+} */
+
+html, body {
+    padding: 0;
+    margin: 0;
+    overflow-y: hidden;
+    font-family: "San Francisco";
+}
+
+#canvas {
+    width: 100%;
+    height: 100vh;
+}
+
+#score-info {
+    color: white;
+    font-size: 30px;
+    position: absolute;
+    left: 20px;
+    top: 10px;
+}   

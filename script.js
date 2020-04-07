@@ -1,7 +1,7 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const backgroundColor = '#222';
+const backgroundColor = '#ffeecc';
 
 const scoreInfo = document.querySelector('#score-info');
 
@@ -31,6 +31,8 @@ let dx, dy, speed, foodX, foodY, gs, score;
 dx = 0; // Number to add to player X
 dy = 0; // Number to add to player Y
 
+snakeColor = '#3efc44'
+size = 30; // Player size and food size
 speed = 5; // Player speed
 gs = false; // Game started
 score = 0; // Player's score
@@ -38,15 +40,15 @@ score = 0; // Player's score
 // The coordinates of the snake
 let snake = [
     {x: centerX, y: centerY },
-    {x: centerX - 20, y: centerY},
-    {x: centerX - 40, y: centerY},
-    {x: centerX - 60, y: centerY},
+    {x: centerX - size, y: centerY},
+    {x: centerX - size * 2, y: centerY},
+    {x: centerX - size * 3, y: centerY},
 ]
 
 // Draw parts of the snake
 function drawSnakePart(snakePart) {
-    ctx.fillStyle = '#33ffcc';
-    ctx.fillRect(snakePart.x, snakePart.y, 20, 20);
+    ctx.fillStyle = snakeColor;
+    ctx.fillRect(snakePart.x, snakePart.y, size, size);
 }
 
 // Draw the snake
@@ -60,10 +62,10 @@ function moveSnake() {
     snake.unshift(head);
 
     // If snake eats the food
-    if (snake[0].x < (foodX + 20) &&
-        snake[0].x + 20 > foodX &&
-        snake[0].y < (foodY + 20) &&
-        snake[0].y + 20 > foodY    
+    if (snake[0].x < (foodX + size) &&
+        snake[0].x + size > foodX &&
+        snake[0].y < (foodY + size) &&
+        snake[0].y + size > foodY    
     ) {
         score += 10;
         speed += .2;
@@ -80,46 +82,45 @@ function clearCanvas() {
 }
 
 function changeDirection(event) {
-    if (event.key === 'ArrowRight' && dx <= 0) {
+    if (event.key === 'ArrowRight' && dx <= 0 && dx >= 0) {
         dx = speed;
         dy = 0;
         gs = true;
     }
 
-    if (event.key === 'ArrowLeft' && dx >= 0) {
+    if (event.key === 'ArrowLeft' && dx >= 0 && dx <= 0) {
         dx = -speed;
         dy = 0;
         gs = true;
     }
 
-    if (event.key === 'ArrowDown' && dy <= 0) {
+    if (event.key === 'ArrowDown' && dy <= 0 && dy >= 0) {
         dx = 0;
         dy = speed;
         gs = true;
     }
     
-    if (event.key === 'ArrowUp' && dy >= 0) {
+    if (event.key === 'ArrowUp' && dy >= 0 && dy <= 0) {
         dx = 0;
         dy = -speed;
         gs = true;
     }
-
     
 }
 
 // Generate random X and Y coordinate value for food
 function randomCoord(min, max) {
-    return Math.round((Math.random() * (max - min) + min) / 20) * 20;
+    return Math.round((Math.random() * (max - min) + min) / size) * size;
 }
 
 function createFood() {
-    foodX = randomCoord(0, canvas.width - 20);
-    foodY = randomCoord(0, canvas.height - 20);
+    foodX = randomCoord(0, canvas.width - size);
+    foodY = randomCoord(0, canvas.height - size);
 }
 
 function drawFood() {
     ctx.fillStyle = 'red';
-    ctx.fillRect(foodX, foodY, 20, 20);
+    ctx.fillRect(foodX, foodY, size, size);
 }
 
 // Detect walls and teleport to the other side if hit

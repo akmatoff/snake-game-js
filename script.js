@@ -20,33 +20,31 @@ fixDpi();
 const centerY = canvas.height / 2;
 const centerX = canvas.width / 2;
 
-let dx, dy, speed, foodX, foodY, gs, score, backgroundColor;
+let dx, dy, speed, foodX, foodY, gs, score, backgroundColor, goPossible, popTime;
 
 dx = 0; // Number to add to player X
 dy = 0; // Number to add to player Y
 
-backgroundColor = '#ffeecc'; // Background color
+backgroundColor = '#111'; // Background color
 snakeColor = '#3efc44'; // Snake color
 size = 30; // Player size and food size
 speed = 5; // Player speed
 gs = false; // Game started
 score = 0; // Player's score
 startTime = 400;
+popTime = 300; // Time when last part of snake will be removed
+goPossible = false; // Game Over Possible
 
-setInterval(() => {backgroundColor = '#cc3360';}, startTime);
-setInterval(() => {backgroundColor = '#334cce'}, startTime * 2);
-setInterval(() => {backgroundColor = '#9efeee'}, startTime * 3);
-setInterval(() => {backgroundColor = '#9ecbee'}, startTime * 4);
-setInterval(() => {backgroundColor = '#3ccfef'}, startTime * 5);
-setInterval(() => {backgroundColor = '#8ffeff'}, startTime * 6);
+// setInterval(() => {backgroundColor = '#cc3360';}, startTime);
+// setInterval(() => {backgroundColor = '#334cce'}, startTime * 2);
+// setInterval(() => {backgroundColor = '#9efeee'}, startTime * 3);
+// setInterval(() => {backgroundColor = '#9ecbee'}, startTime * 4);
+// setInterval(() => {backgroundColor = '#3ccfef'}, startTime * 5);
+// setInterval(() => {backgroundColor = '#8ffeff'}, startTime * 6);
 
 // The coordinates of the snake
 let snake = [
     {x: centerX, y: centerY },
-    {x: centerX - size, y: centerY},
-    {x: centerX - size * 2, y: centerY},
-    {x: centerX - size * 3, y: centerY},
-    {x: centerX - size * 4, y: centerY},
 ]
 
 // Draw parts of the snake
@@ -63,7 +61,7 @@ function drawSnake() {
 function moveSnake() {
     const head =  {x: snake[0].x + dx, y: snake[0].y + dy};
 
-    snake.unshift(head);
+    snake.unshift(head); // Add head as the first element of the array
 
     // If snake eats the food
     if (snake[0].x < (foodX + size) &&
@@ -72,18 +70,11 @@ function moveSnake() {
         snake[0].y + size > foodY    
     ) {
         score += 10;
-        speed += .2;
+        speed += .15;
         createFood();
         scoreInfo.innerHTML = "<b>SCORE:</b> " + score;
     } else {
-        setTimeout(() => {snake.pop();}, 500)
-    }
-
-    for (let i = 0; i < snake.length; i++) {
-        if (snake[0].x < (snake[i] + size) ||
-            snake[0].y === snake[i]) {
-                snake.splice(i);
-            }
+        setTimeout(() => {snake.pop();}, popTime);
     }
 }
 
@@ -147,15 +138,30 @@ function detectWalls() {
     }
 }
 
+function detectEatingTrail() {
+  if (gs && goPossible) {
+    for (let i = 1; i < snake.length; i++) {
+      if (snake[0].x < (snake[snake.length - 1].x + size) &&
+          snake[0].x + size > snake[snake.length - 1].x &&
+          snake[0].y < (snake[snake.length - 1].y + size) &&
+          snake[0].y + size > snake[snake.length - 1].y) {
+            snakeColor = '#ff00000';
+          }
+    }
+  }
+}
+
 // game loop
 function loop() {
     clearCanvas();
     detectWalls();
     if (gs) {
         drawFood();
+        setTimeout(() => {goPossible = true}, popTime);
     }
     drawSnake();
     moveSnake();
+    detectEatingTrail();
     requestAnimationFrame(loop);
 }
 

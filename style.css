@@ -2,24 +2,13 @@
     box-sizing: border-box;
 }
 
-@font-face {
-    font-family: "San Francisco";
-    src: url("SFNSText-Medium.ttf"); 
-}
-
-
-/** Medium */
-/* @font-face {
-    font-family: "San Francisco";
-    font-weight: 500;
-    src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-medium-webfont.woff");
-} */
+@import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
 
 html, body {
     padding: 0;
     margin: 0;
     overflow-y: hidden;
-    font-family: "San Francisco";
+    font-family: 'Alata', sans-serif;
 }
 
 #canvas {
@@ -28,7 +17,7 @@ html, body {
 }
 
 #score-info {
-    color: #202020;
+    color: #f1f1f1;
     font-size: 30px;
     position: absolute;
     left: 20px;
